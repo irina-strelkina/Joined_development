@@ -28,7 +28,7 @@ async def chat(reader, writer):
                 else:
                     for out in clients.values():
                         if out is not clients[me]:
-                            await out.put(f"{me} {line}")
+                            await out.put(cowsay.cowsay(line, cow=me))
             elif q is receive:
                 receive = asyncio.create_task(clients[me].get())
                 writer.write(f"{q.result()}\n".encode())
