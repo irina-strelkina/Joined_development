@@ -26,7 +26,15 @@ async def chat(reader, writer):
                             me = cow
                             clients[me] = asyncio.Queue()
                 else:
-                    if line == "who":
+                    if line == "quit":
+                        del clients[me]
+                        send.cancel()
+                        if receive is not None:
+                            receive.cancel()
+                        writer.close()
+                        await writer.wait_closed()
+                        return
+                    elif line == "who":
                         writer.write((" ".join(clients.keys()) + "\n").encode())
                         await writer.drain()
                     elif line == "cows":
@@ -40,10 +48,6 @@ async def chat(reader, writer):
                             msg = line.split(maxsplit=1)[1]
                             for out in clients.values():
                                 await out.put(cowsay.cowsay(msg, cow=me))
-                        else:
-                            for out in clients.values():
-                                if out is not clients[me]:
-                                    await out.put(cowsay.cowsay(line, cow=me))
             elif q is receive:
                 receive = asyncio.create_task(clients[me].get())
                 writer.write(f"{q.result()}\n".encode())
