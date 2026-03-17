@@ -29,6 +29,9 @@ async def chat(reader, writer):
                     if line == "who":
                         writer.write((" ".join(clients.keys()) + "\n").encode())
                         await writer.drain()
+                    elif line == "cows":
+                        writer.write((" ".join(c for c in cowsay.list_cows() if c not in clients) + "\n").encode())
+                        await writer.drain()
                     else:
                         for out in clients.values():
                             if out is not clients[me]:
