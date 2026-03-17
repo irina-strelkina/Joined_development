@@ -36,6 +36,10 @@ async def chat(reader, writer):
                         cmd = line.split(maxsplit=2)
                         if len(cmd) == 3 and cmd[0] == "say" and cmd[1] in clients:
                             await clients[cmd[1]].put(cowsay.cowsay(cmd[2], cow=me))
+                        elif len(cmd) >= 2 and cmd[0] == "yield":
+                            msg = line.split(maxsplit=1)[1]
+                            for out in clients.values():
+                                await out.put(cowsay.cowsay(msg, cow=me))
                         else:
                             for out in clients.values():
                                 if out is not clients[me]:
