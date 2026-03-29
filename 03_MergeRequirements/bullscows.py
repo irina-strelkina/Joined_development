@@ -16,7 +16,7 @@ def bullscows(guess: str, secret: str) -> tuple[int, int]:
 
 def ask(prompt: str, valid: list[str] = None) -> str:
     while True:
-        word = input(prompt)
+        word = input(cowsay.cowsay(prompt))
         if not valid or word in valid:
             return word
 
