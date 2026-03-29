@@ -1,5 +1,8 @@
 import random
 from collections import Counter
+from pathlib import Path
+from urllib.parse import urlparse
+from urllib.request import urlopen
 
 
 def bullscows(guess: str, secret: str) -> tuple[int, int]:
@@ -32,3 +35,15 @@ def gameplay(ask: callable, inform: callable, words: list[str]) -> int:
 
         if guess == secret:
             return attempts
+
+
+def load_words(source: str) -> list[str]:
+    parsed = urlparse(source)
+
+    if parsed.scheme in ("http", "https"):
+        with urlopen(source) as response:
+            content = response.read().decode("utf-8")
+    else:
+        content = Path(source).read_text(encoding="utf-8")
+
+    return [line.strip() for line in content.splitlines() if line.strip()]
