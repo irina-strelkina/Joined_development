@@ -58,6 +58,17 @@ def normalize_lines(text):
     return text.splitlines()
 
 
+def merge_blocks(left, right):
+    left_width = max(len(line) for line in left)
+    right_width = max(len(line) for line in right)
+    height = max(len(left), len(right))
+
+    left = [" " * left_width] * (height - len(left)) + [line.ljust(left_width) for line in left]
+    right = [" " * right_width] * (height - len(right)) + [line.ljust(right_width) for line in right]
+
+    return left, right
+
+
 class TwoCowsShell(cmd.Cmd):
     prompt = "twocows> "
     intro = "Type help or ? to list commands."
