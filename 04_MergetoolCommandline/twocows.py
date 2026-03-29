@@ -54,6 +54,10 @@ def parse_cowsay_args(arg):
     return first, second
 
 
+def normalize_lines(text):
+    return text.splitlines()
+
+
 class TwoCowsShell(cmd.Cmd):
     prompt = "twocows> "
     intro = "Type help or ? to list commands."
