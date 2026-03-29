@@ -5,6 +5,8 @@ from pathlib import Path
 from urllib.parse import urlparse
 from urllib.request import urlopen
 
+import cowsay
+
 
 def bullscows(guess: str, secret: str) -> tuple[int, int]:
     bulls = sum(g == s for g, s in zip(guess, secret))
@@ -20,7 +22,7 @@ def ask(prompt: str, valid: list[str] = None) -> str:
 
 
 def inform(format_string: str, bulls: int, cows: int) -> None:
-    print(format_string.format(bulls, cows))
+    print(cowsay.cowsay(format_string.format(bulls, cows)))
 
 
 def gameplay(ask: callable, inform: callable, words: list[str]) -> int:
