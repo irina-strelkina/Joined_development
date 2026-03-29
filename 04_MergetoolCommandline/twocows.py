@@ -1,5 +1,6 @@
 import cmd
 import shlex
+import readline
 import cowsay
 
 
@@ -72,6 +73,7 @@ def merge_blocks(left, right):
 class TwoCowsShell(cmd.Cmd):
     prompt = "twocows> "
     intro = "Type help or ? to list commands."
+    cows = cowsay.list_cows()
 
     def do_list_cows(self, arg):
         """List all available cows"""
@@ -150,9 +152,39 @@ class TwoCowsShell(cmd.Cmd):
         for l, r in zip(left, right):
             print(l + "  " + r)
 
+    def complete_cowsay(self, text, line, begidx, endidx):
+        try:
+            tokens = shlex.split(line[:begidx])
+        except ValueError:
+            return []
+
+        if not tokens:
+            return []
+
+        args = tokens[1:]
+
+        if not args:
+            return []
+
+        if "reply" not in args:
+            if len(args) == 1:
+                return [cow for cow in self.cows if cow.startswith(text)]
+            return []
+
+        pos = args.index("reply")
+        right = args[pos + 1:]
+
+        if len(right) == 1:
+            return [cow for cow in self.cows if cow.startswith(text)]
+        return []
+
+    def complete_cowthink(self, text, line, begidx, endidx):
+        return self.complete_cowsay(text, line, begidx, endidx)
+
     def do_EOF(self, arg):
         return True
 
 
 if __name__ == "__main__":
+    readline.set_completer_delims(" ")
     TwoCowsShell().cmdloop()
