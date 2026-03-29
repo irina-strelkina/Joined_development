@@ -47,3 +47,7 @@ def load_words(source: str) -> list[str]:
         content = Path(source).read_text(encoding="utf-8")
 
     return [line.strip() for line in content.splitlines() if line.strip()]
+
+
+def filter_words(words: list[str], length: int) -> list[str]:
+    return [word for word in words if len(word) == length]
