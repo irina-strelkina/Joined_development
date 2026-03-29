@@ -56,7 +56,6 @@ def filter_words(words: list[str], length: int) -> list[str]:
 
 def main() -> None:
     if len(sys.argv) < 2:
-        print("Использование: python -m bullscows <словарь|URL> [длина]")
         raise SystemExit(1)
 
     source = sys.argv[1]
@@ -64,6 +63,13 @@ def main() -> None:
 
     words = load_words(source)
     words = filter_words(words, length)
+
+    if not words:
+        print("Подходящих слов не найдено")
+        raise SystemExit(1)
+
+    attempts = gameplay(ask, inform, words)
+    print("Количество попыток:", attempts)
 
 
 if __name__ == "__main__":
