@@ -36,6 +36,24 @@ def parse_shlex_command(line):
     }
 
 
+def parse_cowsay_args(arg):
+    tokens = shlex.split(arg)
+    if "reply" not in tokens:
+        raise ValueError('cowsay requires "reply"')
+
+    pos = tokens.index("reply")
+    left = tokens[:pos]
+    right = tokens[pos + 1:]
+
+    if not left or not right:
+        raise ValueError("both messages are required")
+
+    first = parse_shlex_command(shlex.join(left))
+    second = parse_shlex_command(shlex.join(right))
+
+    return first, second
+
+
 class TwoCowsShell(cmd.Cmd):
     prompt = "twocows> "
     intro = "Type help or ? to list commands."
