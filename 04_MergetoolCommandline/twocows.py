@@ -96,6 +96,33 @@ class TwoCowsShell(cmd.Cmd):
 
         print(cowsay.make_bubble(message, width=width, wrap_text=wrap_text))
 
+    def do_cowsay(self, arg):
+        """cowsay message"""
+        try:
+            first, second = parse_cowsay_args(arg)
+        except ValueError as e:
+            print(e)
+            return
+
+        first_text = cowsay.cowsay(
+            message=first["message"],
+            cow=first["cow"],
+            eyes=first["extra"].get("eyes", "oo"),
+            tongue=first["extra"].get("tongue", "  "),
+        )
+
+        second_text = cowsay.cowsay(
+            message=second["message"],
+            cow=second["cow"],
+            eyes=second["extra"].get("eyes", "oo"),
+            tongue=second["extra"].get("tongue", "  "),
+        )
+
+        left, right = merge_blocks(normalize_lines(first_text), normalize_lines(second_text))
+
+        for l, r in zip(left, right):
+            print(l + "  " + r)
+
     def do_EOF(self, arg):
         return True
 
