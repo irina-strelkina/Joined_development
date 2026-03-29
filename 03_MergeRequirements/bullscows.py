@@ -1,4 +1,5 @@
 import random
+import sys
 from collections import Counter
 from pathlib import Path
 from urllib.parse import urlparse
@@ -51,3 +52,19 @@ def load_words(source: str) -> list[str]:
 
 def filter_words(words: list[str], length: int) -> list[str]:
     return [word for word in words if len(word) == length]
+
+
+def main() -> None:
+    if len(sys.argv) < 2:
+        print("Использование: python -m bullscows <словарь|URL> [длина]")
+        raise SystemExit(1)
+
+    source = sys.argv[1]
+    length = int(sys.argv[2]) if len(sys.argv) > 2 else 5
+
+    words = load_words(source)
+    words = filter_words(words, length)
+
+
+if __name__ == "__main__":
+    main()
