@@ -123,6 +123,33 @@ class TwoCowsShell(cmd.Cmd):
         for l, r in zip(left, right):
             print(l + "  " + r)
 
+    def do_cowthink(self, arg):
+        """cowthink message"""
+        try:
+            first, second = parse_cowsay_args(arg)
+        except ValueError as e:
+            print(e)
+            return
+
+        first_text = cowsay.cowthink(
+            message=first["message"],
+            cow=first["cow"],
+            eyes=first["extra"].get("eyes", "oo"),
+            tongue=first["extra"].get("tongue", "  "),
+        )
+
+        second_text = cowsay.cowthink(
+            message=second["message"],
+            cow=second["cow"],
+            eyes=second["extra"].get("eyes", "oo"),
+            tongue=second["extra"].get("tongue", "  "),
+        )
+
+        left, right = merge_blocks(normalize_lines(first_text), normalize_lines(second_text))
+
+        for l, r in zip(left, right):
+            print(l + "  " + r)
+
     def do_EOF(self, arg):
         return True
 
